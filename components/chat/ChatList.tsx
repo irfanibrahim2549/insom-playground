@@ -218,7 +218,7 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                   <img
                     src="/dot-recording-red.svg"
                     alt="Recording indicator"
-                    className="w-4.5 h-4.5 absolute -top-1.5 -right-1.5 pointer-events-none z-10"
+                    className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
                   />
                 </div>
 
@@ -234,7 +234,7 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                     <img
                       src="/dot-recording-red.svg"
                       alt="Recording indicator"
-                      className="w-4.5 h-4.5 absolute -top-1.5 -right-1.5 pointer-events-none z-10"
+                      className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
                     />
                   </div>
                 )}
@@ -372,7 +372,7 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                     <img
                       src="/dot-recording-red.svg"
                       alt="Recording indicator"
-                      className="w-4 h-4 absolute -top-1 -right-1 pointer-events-none z-10"
+                      className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
                     />
                   </div>
 
@@ -387,7 +387,7 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                       <img
                         src="/dot-recording-red.svg"
                         alt="Recording indicator"
-                        className="w-4 h-4 absolute -top-1 -right-1 pointer-events-none z-10"
+                        className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
                       />
                     </div>
                   )}
