@@ -203,25 +203,40 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                 >
                   All
                 </button>
-                <button
-                  onClick={() => setActiveTab("assigned")}
-                  className={`px-3 py-1 text-xs font-semibold rounded-full transition-all whitespace-nowrap ${
-                    activeTab === "assigned"
-                      ? "bg-sky-100/80 text-sky-700 font-bold shadow-2xs"
-                      : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
-                  }`}
-                >
-                  Agent Assigned ({getTabCount("assigned")})
-                </button>
+                {/* Agent Assigned Pill with Floating Red Dot Animation */}
+                <div className="relative inline-flex items-center">
+                  <button
+                    onClick={() => setActiveTab("assigned")}
+                    className={`px-3 py-1 text-xs font-semibold rounded-full transition-all whitespace-nowrap ${
+                      activeTab === "assigned"
+                        ? "bg-sky-100/80 text-sky-700 font-bold shadow-2xs"
+                        : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    Agent Assigned
+                  </button>
+                  <img
+                    src="/dot-recording-red.svg"
+                    alt="Recording indicator"
+                    className="w-4.5 h-4.5 absolute -top-1.5 -right-1.5 pointer-events-none z-10"
+                  />
+                </div>
 
                 {/* Dynamic Active Optional Status Pill */}
                 {isOptionalTabActive && (
-                  <button
-                    onClick={() => setActiveTab(activeTab)}
-                    className="px-3 py-1 text-xs font-bold rounded-full transition-all whitespace-nowrap bg-sky-100/80 text-sky-700 shadow-2xs animate-in fade-in zoom-in-95 duration-150"
-                  >
-                    {optionalTabsMap[activeTab]} ({getTabCount(activeTab)})
-                  </button>
+                  <div className="relative inline-flex items-center">
+                    <button
+                      onClick={() => setActiveTab(activeTab)}
+                      className="px-3 py-1 text-xs font-bold rounded-full transition-all whitespace-nowrap bg-sky-100/80 text-sky-700 shadow-2xs animate-in fade-in zoom-in-95 duration-150"
+                    >
+                      {optionalTabsMap[activeTab]}
+                    </button>
+                    <img
+                      src="/dot-recording-red.svg"
+                      alt="Recording indicator"
+                      className="w-4.5 h-4.5 absolute -top-1.5 -right-1.5 pointer-events-none z-10"
+                    />
+                  </div>
                 )}
 
                 {/* Arrow Down Dropdown Trigger Button */}
@@ -343,24 +358,38 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                       Unassigned
                     </button>
                   )}
-                  <button
-                    onClick={() => setSpvSubTab("assigned")}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
-                      spvSubTab === "assigned"
-                        ? "bg-sky-100/80 text-sky-700 font-bold"
-                        : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
-                    }`}
-                  >
-                    Agent Assigned
-                  </button>
+                  <div className="relative inline-flex items-center">
+                    <button
+                      onClick={() => setSpvSubTab("assigned")}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
+                        spvSubTab === "assigned"
+                          ? "bg-sky-100/80 text-sky-700 font-bold"
+                          : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      Agent Assigned
+                    </button>
+                    <img
+                      src="/dot-recording-red.svg"
+                      alt="Recording indicator"
+                      className="w-4 h-4 absolute -top-1 -right-1 pointer-events-none z-10"
+                    />
+                  </div>
 
                   {isSpvOptionalActive && (
-                    <button
-                      onClick={() => setSpvSubTab(spvSubTab)}
-                      className="px-2.5 py-1 text-[11px] font-bold rounded-full transition-all whitespace-nowrap bg-sky-100/80 text-sky-700 shadow-2xs"
-                    >
-                      {optionalTabsMap[spvSubTab]}
-                    </button>
+                    <div className="relative inline-flex items-center">
+                      <button
+                        onClick={() => setSpvSubTab(spvSubTab)}
+                        className="px-2.5 py-1 text-[11px] font-bold rounded-full transition-all whitespace-nowrap bg-sky-100/80 text-sky-700 shadow-2xs"
+                      >
+                        {optionalTabsMap[spvSubTab]}
+                      </button>
+                      <img
+                        src="/dot-recording-red.svg"
+                        alt="Recording indicator"
+                        className="w-4 h-4 absolute -top-1 -right-1 pointer-events-none z-10"
+                      />
+                    </div>
                   )}
 
                   {/* ChevronDown Dropdown Trigger */}
