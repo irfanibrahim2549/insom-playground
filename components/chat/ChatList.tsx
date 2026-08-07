@@ -149,12 +149,6 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
           </button>
 
           <div className="flex items-center gap-1.5">
-            {/* Green Dot Pill Counter Badge: 🟢 N */}
-            <div className="px-2.5 py-0.5 border border-slate-200 bg-white rounded-full text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>{unassignedCount}</span>
-            </div>
-
             {/* Add Channel */}
             <button className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" title="Add">
               <Plus size={16} />
