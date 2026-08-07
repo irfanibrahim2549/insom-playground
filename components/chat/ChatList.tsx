@@ -149,6 +149,12 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
           </button>
 
           <div className="flex items-center gap-1.5">
+            {/* Green Dot Pill Counter Badge: 🟢 N */}
+            <div className="px-2.5 py-0.5 border border-slate-200 bg-white rounded-full text-xs font-bold text-slate-700 flex items-center gap-1.5 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>{unassignedCount}</span>
+            </div>
+
             {/* Add Channel */}
             <button className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" title="Add">
               <Plus size={16} />
@@ -165,20 +171,13 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
               <Search size={16} />
             </button>
 
-            {/* Filter Modal Trigger */}
+            {/* Refresh / Simulate Incoming Chat */}
             <button
-              onClick={() => setIsFilterModalOpen(true)}
-              className={`p-1.5 rounded-lg transition-colors relative ${
-                filterTags.length > 0 || filterDivision !== "All"
-                  ? "bg-sky-50 text-sky-600"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
-              }`}
-              title="Filter"
+              onClick={triggerNewUnassignedChat}
+              className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors active:scale-95"
+              title="Simulasikan Chat Unassigned Baru"
             >
-              <SlidersHorizontal size={16} />
-              {(filterTags.length > 0 || filterDivision !== "All") && (
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-sky-500 rounded-full"></span>
-              )}
+              <RefreshCw size={16} />
             </button>
           </div>
         </div>
@@ -300,21 +299,40 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                 </div>
               </div>
 
-              {/* Iconify Sort Button */}
-              <div className="relative group shrink-0">
+              {/* Right: Filter Modal Trigger & Sort Icon Button */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                {/* Filter Modal Trigger */}
                 <button
-                  onClick={toggleSortOrder}
-                  className="p-1.5 rounded-lg bg-slate-50 hover:bg-sky-50 text-slate-600 hover:text-sky-600 border border-slate-200/80 transition-all active:scale-95 flex items-center justify-center"
-                  aria-label={`Sort: ${sortOrder === "newest" ? "Newest" : "Older"}`}
+                  onClick={() => setIsFilterModalOpen(true)}
+                  className={`p-1.5 rounded-lg transition-colors relative ${
+                    filterTags.length > 0 || filterDivision !== "All"
+                      ? "bg-sky-50 text-sky-600"
+                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                  }`}
+                  title="Filter Modal (Division & Tags)"
                 >
-                  {sortOrder === "newest" ? (
-                    <Icon icon="solar:sort-from-bottom-to-top-bold-duotone" className="w-5 h-5 text-sky-500" />
-                  ) : (
-                    <Icon icon="solar:sort-from-top-to-bottom-line-duotone" className="w-5 h-5 text-sky-500" />
+                  <SlidersHorizontal size={16} />
+                  {(filterTags.length > 0 || filterDivision !== "All") && (
+                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-sky-500 rounded-full"></span>
                   )}
                 </button>
-                <div className="absolute right-0 top-full mt-1 px-2.5 py-1 bg-slate-800 text-white text-[10px] font-bold rounded-md whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
-                  Sort: {sortOrder === "newest" ? "Newest" : "Older"}
+
+                {/* Iconify Sort Button */}
+                <div className="relative group shrink-0">
+                  <button
+                    onClick={toggleSortOrder}
+                    className="p-1.5 rounded-lg bg-slate-50 hover:bg-sky-50 text-slate-600 hover:text-sky-600 border border-slate-200/80 transition-all active:scale-95 flex items-center justify-center"
+                    aria-label={`Sort: ${sortOrder === "newest" ? "Newest" : "Older"}`}
+                  >
+                    {sortOrder === "newest" ? (
+                      <Icon icon="solar:sort-from-bottom-to-top-bold-duotone" className="w-4 h-4 text-sky-500" />
+                    ) : (
+                      <Icon icon="solar:sort-from-top-to-bottom-line-duotone" className="w-4 h-4 text-sky-500" />
+                    )}
+                  </button>
+                  <div className="absolute right-0 top-full mt-1 px-2.5 py-1 bg-slate-800 text-white text-[10px] font-bold rounded-md whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
+                    Sort: {sortOrder === "newest" ? "Newest" : "Older"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -455,21 +473,38 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                   </div>
                 </div>
 
-                {/* Iconify Sort Button */}
-                <div className="relative group shrink-0">
+                {/* Right: Filter Modal Trigger & Sort Icon Button */}
+                <div className="flex items-center gap-1.5 shrink-0">
                   <button
-                    onClick={toggleSortOrder}
-                    className="p-1 rounded-lg bg-slate-50 hover:bg-sky-50 text-slate-600 hover:text-sky-600 border border-slate-200/80 transition-all active:scale-95 flex items-center justify-center"
-                    aria-label={`Sort: ${sortOrder === "newest" ? "Newest" : "Older"}`}
+                    onClick={() => setIsFilterModalOpen(true)}
+                    className={`p-1.5 rounded-lg transition-colors relative ${
+                      filterTags.length > 0 || filterDivision !== "All"
+                        ? "bg-sky-50 text-sky-600"
+                        : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+                    }`}
+                    title="Filter Modal (Division & Tags)"
                   >
-                    {sortOrder === "newest" ? (
-                      <Icon icon="solar:sort-from-bottom-to-top-bold-duotone" className="w-4 h-4 text-sky-500" />
-                    ) : (
-                      <Icon icon="solar:sort-from-top-to-bottom-line-duotone" className="w-4 h-4 text-sky-500" />
+                    <SlidersHorizontal size={16} />
+                    {(filterTags.length > 0 || filterDivision !== "All") && (
+                      <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-sky-500 rounded-full"></span>
                     )}
                   </button>
-                  <div className="absolute right-0 top-full mt-1 px-2.5 py-1 bg-slate-800 text-white text-[10px] font-bold rounded-md whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
-                    Sort: {sortOrder === "newest" ? "Newest" : "Older"}
+
+                  <div className="relative group shrink-0">
+                    <button
+                      onClick={toggleSortOrder}
+                      className="p-1.5 rounded-lg bg-slate-50 hover:bg-sky-50 text-slate-600 hover:text-sky-600 border border-slate-200/80 transition-all active:scale-95 flex items-center justify-center"
+                      aria-label={`Sort: ${sortOrder === "newest" ? "Newest" : "Older"}`}
+                    >
+                      {sortOrder === "newest" ? (
+                        <Icon icon="solar:sort-from-bottom-to-top-bold-duotone" className="w-4 h-4 text-sky-500" />
+                      ) : (
+                        <Icon icon="solar:sort-from-top-to-bottom-line-duotone" className="w-4 h-4 text-sky-500" />
+                      )}
+                    </button>
+                    <div className="absolute right-0 top-full mt-1 px-2.5 py-1 bg-slate-800 text-white text-[10px] font-bold rounded-md whitespace-nowrap shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30">
+                      Sort: {sortOrder === "newest" ? "Newest" : "Older"}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -482,21 +517,10 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
       {viewMode === "agent" && (
         <div className="p-3 bg-slate-50 border-b border-slate-100">
           {unassignedCount === 0 ? (
-            /* State when 0 Chat Unassigned - matches user screenshot */
-            <div className="flex items-center justify-between px-1">
-              <div className="flex items-center gap-2 text-slate-700 font-bold text-xs">
-                <MessageSquare size={16} className="text-slate-400" />
-                <span>0 Chat Unassigned</span>
-              </div>
-
-              <button
-                onClick={triggerNewUnassignedChat}
-                className="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 transition-all"
-                title="Klik Refresh untuk mensimulasikan chat unassigned baru"
-              >
-                <RefreshCw size={13} className="stroke-[2.5]" />
-                <span>Refresh</span>
-              </button>
+            /* State when 0 Chat Unassigned - matches user screenshot 100% (refresh button removed) */
+            <div className="flex items-center gap-2 text-slate-700 font-bold text-xs px-1 py-0.5">
+              <MessageSquare size={16} className="text-slate-400" />
+              <span>0 Chat Unassigned</span>
             </div>
           ) : hasUnassignedNotification ? (
             /* Interactive Blue Banner with "Get New Chat" button */
