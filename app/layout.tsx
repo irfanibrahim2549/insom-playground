@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ChatProvider } from "@/context/ChatContext";
+import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 
 export const metadata: Metadata = {
   title: "Insomnia - Omnichannel Chat User Testing",
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className="h-screen w-screen overflow-hidden bg-slate-100 flex flex-col antialiased">
+        <MicrosoftClarity />
         <ChatProvider>{children}</ChatProvider>
       </body>
     </html>
