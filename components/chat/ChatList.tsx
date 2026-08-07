@@ -511,10 +511,20 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
       {viewMode === "agent" && (
         <div className="p-3 bg-slate-50 border-b border-slate-100">
           {unassignedCount === 0 ? (
-            /* State when 0 Chat Unassigned - matches user screenshot 100% (refresh button removed) */
-            <div className="flex items-center gap-2 text-slate-700 font-bold text-xs px-1 py-0.5">
-              <MessageSquare size={16} className="text-slate-400" />
-              <span>0 Chat Unassigned</span>
+            /* State when 0 Chat Unassigned - shows primary blue Get New Chat button */
+            <div className="flex items-center justify-between px-1 py-0.5">
+              <div className="flex items-center gap-2 text-slate-700 font-bold text-xs">
+                <MessageSquare size={16} className="text-slate-400" />
+                <span>0 Chat Unassigned</span>
+              </div>
+
+              <button
+                onClick={handleGetNewChat}
+                className="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all flex items-center gap-1.5"
+                title="Get New Chat"
+              >
+                <span>Get New Chat</span>
+              </button>
             </div>
           ) : hasUnassignedNotification ? (
             /* Interactive Blue Banner with "Get New Chat" button */

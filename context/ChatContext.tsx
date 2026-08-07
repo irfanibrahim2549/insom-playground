@@ -251,6 +251,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [filterDivision, setFilterDivision] = useState<string>("All");
   const [hasUnassignedNotification, setHasUnassignedNotification] = useState<boolean>(true);
   const [latestUnassignedTime, setLatestUnassignedTime] = useState<string>("a few seconds ago");
+  const [firstUnassignedTimestamp, setFirstUnassignedTimestamp] = useState<number | null>(() => Date.now() - 10000);
   const [autoTimerActive, setAutoTimerActive] = useState<boolean>(true);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
@@ -261,6 +262,44 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Derived unassigned count
   const unassignedCount = chats.filter((c) => c.status === "Unassigned").length;
+
+  // Sync firstUnassignedTimestamp with unassignedCount
+  useEffect(() => {
+    if (unassignedCount === 0) {
+      setFirstUnassignedTimestamp(null);
+    } else if (!firstUnassignedTimestamp) {
+      setFirstUnassignedTimestamp(Date.now());
+    }
+  }, [unassignedCount, firstUnassignedTimestamp]);
+
+  // Dynamic Relative Time Calculation Interval ("a few seconds ago", "1 minute ago", "2 minutes ago", etc.)
+  useEffect(() => {
+    if (!firstUnassignedTimestamp || unassignedCount === 0) {
+      setLatestUnassignedTime("a few seconds ago");
+      return;
+    }
+
+    const updateTime = () => {
+      const elapsedSec = Math.max(0, Math.floor((Date.now() - firstUnassignedTimestamp) / 1000));
+      if (elapsedSec < 45) {
+        setLatestUnassignedTime("a few seconds ago");
+      } else {
+        const elapsedMin = Math.floor(elapsedSec / 60);
+        if (elapsedMin <= 1) {
+          setLatestUnassignedTime("1 minute ago");
+        } else if (elapsedMin < 60) {
+          setLatestUnassignedTime(`${elapsedMin} minutes ago`);
+        } else {
+          const elapsedHours = Math.floor(elapsedMin / 60);
+          setLatestUnassignedTime(elapsedHours === 1 ? "1 hour ago" : `${elapsedHours} hours ago`);
+        }
+      }
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 3000);
+    return () => clearInterval(interval);
+  }, [firstUnassignedTimestamp, unassignedCount]);
 
   const triggerNewUnassignedChat = () => {
     const newId = `chat-sim-${Date.now()}`;
@@ -291,7 +330,9 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setChats((prev) => [newSimulatedChat, ...prev]);
     setHasUnassignedNotification(true);
-    setLatestUnassignedTime("a few seconds ago");
+    if (unassignedCount === 0) {
+      setFirstUnassignedTimestamp(Date.now());
+    }
   };
 
   // Background Automatic Simulation Timer
@@ -305,12 +346,46 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => clearInterval(interval);
   }, [autoTimerActive]);
 
-  // Handle "Get New Chat" button action - Assign ALL unassigned chats to Johnny
+  // Handle "Get New Chat" button action - Assign ALL unassigned chats to Johnny (or generate one if 0)
   const handleGetNewChat = () => {
     const unassignedChats = chats.filter((c) => c.status === "Unassigned");
-    if (unassignedChats.length === 0) return;
-
     const currentTimeStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    if (unassignedChats.length === 0) {
+      const newId = `chat-sim-${Date.now()}`;
+      const newNames = ["Budi Santoso", "Siti Rahma", "Ahmad Fauzi", "Dewi Lestari", "Rudi Hermawan"];
+      const randomName = newNames[Math.floor(Math.random() * newNames.length)];
+      const randomPhone = `08${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+
+      const newAssignedChat: ChatItem = {
+        id: newId,
+        name: randomName,
+        avatar: "",
+        phone: randomPhone,
+        company: "Customer Testing",
+        time: "Just now",
+        lastMessage: "Halo min, saya butuh bantuan cepat mengenai pesanan saya!",
+        status: "Assigned",
+        assignedTo: "Johnny",
+        unreadCount: 0,
+        channel: "WhatsApp",
+        tags: ["Register", "Pembayaran"],
+        division: "Customer Service",
+        created: "Just now",
+        lastSeen: "Just now",
+        messages: [
+          { id: `m-${Date.now()}`, sender: "user", text: "Halo min, saya butuh bantuan cepat mengenai pesanan saya!", time: currentTimeStr },
+          { id: `sys-${Date.now()}`, sender: "system", text: `${currentTimeStr} - Conversation has been assigned to Johnny by Get New Chat button`, time: currentTimeStr }
+        ]
+      };
+
+      setChats((prev) => [newAssignedChat, ...prev]);
+      setActiveChatId(newId);
+      setHasUnassignedNotification(false);
+      setFirstUnassignedTimestamp(null);
+      return;
+    }
+
     const targetChatId = unassignedChats[0].id;
 
     setChats((prev) =>
@@ -336,6 +411,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setActiveChatId(targetChatId);
     setHasUnassignedNotification(false);
+    setFirstUnassignedTimestamp(null);
   };
 
   // Send message in active chat (Auto-assigns unassigned chat to sender)
