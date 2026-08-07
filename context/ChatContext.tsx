@@ -206,6 +206,28 @@ const INITIAL_CHATS: ChatItem[] = [
     messages: [
       { id: "m7-1", sender: "user", text: "Mohon ditransfer ke tim sales.", time: "15:45" }
     ]
+  },
+  {
+    id: "chat-assigned-unread",
+    name: "Ahmad Fauzi",
+    avatar: "",
+    phone: "081298765432",
+    company: "PT Solusi Sukses",
+    time: "Today at 15:40",
+    lastMessage: "Halo min, ini bukti pembayarannya sudah saya kirim ya!",
+    status: "Assigned",
+    assignedTo: "Johnny",
+    unreadCount: 1,
+    channel: "WhatsApp",
+    tags: ["Pembayaran"],
+    division: "Customer Service",
+    created: "Today at 15:00",
+    lastSeen: "Today at 15:40",
+    messages: [
+      { id: "mau-1", sender: "user", text: "Halo min, mau tanya rekening pembayaran?", time: "15:00" },
+      { id: "mau-2", sender: "agent", text: "Halo Kak Ahmad, silakan transfer ke BCA 1234567890 an InterActive.", time: "15:05", authorName: "Johnny" },
+      { id: "mau-3", sender: "user", text: "Halo min, ini bukti pembayarannya sudah saya kirim ya!", time: "15:40" }
+    ]
   }
 ];
 
@@ -213,7 +235,16 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [chats, setChats] = useState<ChatItem[]>(INITIAL_CHATS);
-  const [activeChatId, setActiveChatId] = useState<string | null>("chat-4");
+  const [activeChatId, setActiveChatIdState] = useState<string | null>("chat-4");
+
+  const setActiveChatId = (id: string | null) => {
+    setActiveChatIdState(id);
+    if (id) {
+      setChats((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c))
+      );
+    }
+  };
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterTags, setFilterTags] = useState<string[]>([]);

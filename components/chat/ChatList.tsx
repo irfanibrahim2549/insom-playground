@@ -56,6 +56,17 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
     return chats.length;
   };
 
+  // Check if any assigned chat has unreplied / unread messages
+  const hasUnreadAssigned = chats.some(
+    (c) => c.status === "Assigned" && (c.unreadCount ?? 0) > 0
+  );
+
+  const hasUnreadTab = (tabKey: string) => {
+    return chats.some(
+      (c) => c.status.toLowerCase() === tabKey.toLowerCase() && (c.unreadCount ?? 0) > 0
+    );
+  };
+
   // Filter logic
   const rawFilteredChats = chats.filter((chat) => {
     // Search query
@@ -203,7 +214,7 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                 >
                   All
                 </button>
-                {/* Agent Assigned Pill with Floating Red Dot Animation */}
+                {/* Agent Assigned Pill with Floating Red Dot Animation (Only if unreplied/unread chats exist) */}
                 <div className="relative inline-flex items-center">
                   <button
                     onClick={() => setActiveTab("assigned")}
@@ -215,11 +226,13 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                   >
                     Agent Assigned
                   </button>
-                  <img
-                    src="/dot-recording-red.svg"
-                    alt="Recording indicator"
-                    className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
-                  />
+                  {hasUnreadAssigned && (
+                    <img
+                      src="/dot-recording-red.svg"
+                      alt="Unreplied messages indicator"
+                      className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
+                    />
+                  )}
                 </div>
 
                 {/* Dynamic Active Optional Status Pill */}
@@ -231,11 +244,13 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                     >
                       {optionalTabsMap[activeTab]}
                     </button>
-                    <img
-                      src="/dot-recording-red.svg"
-                      alt="Recording indicator"
-                      className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
-                    />
+                    {hasUnreadTab(activeTab) && (
+                      <img
+                        src="/dot-recording-red.svg"
+                        alt="Unreplied messages indicator"
+                        className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
+                      />
+                    )}
                   </div>
                 )}
 
@@ -369,11 +384,13 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                     >
                       Agent Assigned
                     </button>
-                    <img
-                      src="/dot-recording-red.svg"
-                      alt="Recording indicator"
-                      className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
-                    />
+                    {hasUnreadAssigned && (
+                      <img
+                        src="/dot-recording-red.svg"
+                        alt="Unreplied messages indicator"
+                        className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
+                      />
+                    )}
                   </div>
 
                   {isSpvOptionalActive && (
@@ -384,11 +401,13 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                       >
                         {optionalTabsMap[spvSubTab]}
                       </button>
-                      <img
-                        src="/dot-recording-red.svg"
-                        alt="Recording indicator"
-                        className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
-                      />
+                      {hasUnreadTab(spvSubTab) && (
+                        <img
+                          src="/dot-recording-red.svg"
+                          alt="Unreplied messages indicator"
+                          className="w-2.5 h-2.5 absolute -top-0.5 -right-0.5 pointer-events-none z-10"
+                        />
+                      )}
                     </div>
                   )}
 
