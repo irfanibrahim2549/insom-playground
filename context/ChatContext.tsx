@@ -383,6 +383,42 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return c;
       })
     );
+
+    // Simulated Customer Reply Scenario: 10 seconds after agent/SPV replies, customer sends a follow-up reply!
+    const targetChatId = activeChatId;
+    setTimeout(() => {
+      const replyTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const customerReplies = [
+        "Baik kak, terima kasih banyak atas infonya!",
+        "Siap kak, pesanan sedang saya cek kembali ya.",
+        "Oke kak, lalu untuk kelanjutan konfirmasinya bagaimana?",
+        "Terima kasih atas tanggapan cepatnya kak!"
+      ];
+      const randomReply = customerReplies[Math.floor(Math.random() * customerReplies.length)];
+
+      setChats((prev) =>
+        prev.map((c) => {
+          if (c.id === targetChatId) {
+            return {
+              ...c,
+              lastMessage: randomReply,
+              time: `Today at ${replyTime}`,
+              unreadCount: 1, // Triggers unread state and pulsing red recording dot indicator!
+              messages: [
+                ...c.messages,
+                {
+                  id: `m-cust-reply-${Date.now()}`,
+                  sender: "user",
+                  text: randomReply,
+                  time: replyTime
+                }
+              ]
+            };
+          }
+          return c;
+        })
+      );
+    }, 10000);
   };
 
   // Resolve chat
