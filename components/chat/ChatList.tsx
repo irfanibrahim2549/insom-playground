@@ -304,7 +304,10 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                   All Message
                 </button>
                 <button
-                  onClick={() => setActiveTab("mine")}
+                  onClick={() => {
+                    setActiveTab("mine");
+                    if (spvSubTab === "unassigned") setSpvSubTab("all");
+                  }}
                   className={`text-xs font-bold transition-all relative pb-1 ${
                     activeTab === "mine"
                       ? "text-sky-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-sky-500"
@@ -328,16 +331,18 @@ export const ChatList: React.FC<ChatListProps> = ({ viewMode }) => {
                   >
                     All
                   </button>
-                  <button
-                    onClick={() => setSpvSubTab("unassigned")}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
-                      spvSubTab === "unassigned"
-                        ? "bg-red-100/80 text-red-700 font-bold"
-                        : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
-                    }`}
-                  >
-                    Unassigned
-                  </button>
+                  {activeTab === "all" && (
+                    <button
+                      onClick={() => setSpvSubTab("unassigned")}
+                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
+                        spvSubTab === "unassigned"
+                          ? "bg-red-100/80 text-red-700 font-bold"
+                          : "bg-slate-100/60 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      Unassigned
+                    </button>
+                  )}
                   <button
                     onClick={() => setSpvSubTab("assigned")}
                     className={`px-2.5 py-1 text-[11px] font-semibold rounded-full transition-all whitespace-nowrap ${
